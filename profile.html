@@ -1,130 +1,144 @@
-<hmtl>
-    <head>
-     
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>          
-          <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <hmtl>
+      <head>
+      
+          <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>          
+            <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 
-        <script>
-           
-          $(document).ready(function(){
-            let query = location.search
-			let param = new URLSearchParams(query)
-            let users={}
-            let posts=[]
-
-
-			let id = param.get("id")
-            axios.get(`https://jsonplaceholder.typicode.com/posts`).then(response=>{
-                    posts=response.data
-                       
-                        
-            })
+          <script>
             
+            $(document).ready(function(){
+              let query = location.search
+        let param = new URLSearchParams(query)
+              let users={}
+              let posts=[]
 
 
-
-            axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)
-			.then(response => {
-				let totalPosts=0
-                user = response.data
-                //-----------posts counting--------//
-        //   postTitle=[]
-
-                    for( var i =0;i<posts.length;i++)
-                         {
-                              if(  user.id ==  posts[i].userId)
-                              {
-                                    totalPosts++
-                           //     $(".postTitle").text(posts[i].title)
-                            //     $(".postBody").text(posts[i].body)  
-                           
-                            $("#card3").text(totalPosts)
-
-                            $(".card1").prepend(
-                            `
-                            
-                            
-                            <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="postTitle">"Title:${posts[i].id} " ${posts[i].title}</h5>
-                            <p class="postBody">${posts[i].body}</p>
-                                </div>
-                            </div>
-
-                            `
-
-                            )
-                              }
-
-                        }
-                      //  console.log("total posts="+totalPosts);
+        let id = param.get("id")
+              axios.get(`https://jsonplaceholder.typicode.com/posts`).then(response=>{
+                      posts=response.data
                         
-               
-                
-                 //-----------posts counting--------//
-			//	console.log(response.data)
-				$(".card-title").text(user.name)
-				$(".card-text1").text(`Email:=${user.email}`)
-				$(".card-text")
-				.text(`Address - ${user.address.suite},
-						${user.address.street},
-                        ${user.address.city},
-                        
-                        `
-                    )
-				
-                
+                          
+              })
+              let comments=[]
+              
+              axios.get(`https://jsonplaceholder.typicode.com/comments`).then(response =>
+              {
+                comments=response.data;
+                //console.log(comments)
+              
+      
+              })
 
 
-            })
-          })
-        </script>
-
-    </head>
-
-    <body>
-
-        <div class="container">
-            <h2>User Info</h2>
-          
-            <div class="card" style="width:400px">
-              <img class="card-img-top" src="https://www.w3schools.com/bootstrap4/img_avatar1.png" alt="Card image" style="width:100%">
-              <div class="card-body">
-                <h4 class="card-title">John Doe</h4>
-                <p class="card-text1"></p>
-                <p class="card-text"></p>
-                
-                <a href="#" class="btn btn-primary">See Profile</a>
-              </div>
-            </div>
-            <br>
-            
-         
-           <!----><!---->
-            <div class= "row">
-                                 <div id class="col-lg-6" >
-                    <div class="card1">
-                          </div></div>
-                  
+              axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)
+        .then(response => {
+          let totalPosts=0
+                  user = response.data
+                  //-----------posts counting--------//
+          //   postTitle=[]
         
-                  <!----><!---- forposts--->
-                  <div class="col-lg-6">
-                    <div id ="card3" class="card bg-light">
-                        <div class="card-body">
-                            <h5  id="postCount" class="card-title">Light card title</h5>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu sem tempor.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-            
-        </div>
+                      for( var i =0;i<posts.length;i++)
+                          { let totalCommentsOnPost=0;
+                          
+                                if(  user.id ==  posts[i].userId)
+                                {
+                                      totalPosts++
+                            //     $(".postTitle").text(posts[i].title)
+                              //     $(".postBody").text(posts[i].body)  
+                            for(var l=0;l<comments.length;l++)
+                            {
+                              if(comments[l].postId==posts[i].id){
+                                totalCommentsOnPost++
+                              }
+                            }
+                          $("#card3").text(`no of post by ${user.name} is : `+totalPosts )
 
-    </body>
-</hmtl>
+                              $(".card1").prepend(
+                              `
+                              
+                              
+                              <div class="card" style="width: 18rem;">
+                          <div class="card-body">
+                              <h5 class="postTitle">"Title:${posts[i].id} " ${posts[i].title}</h5>
+                              <p class="postBody">${posts[i].body}</p>
+                              <h6>comments on posts are: ${totalCommentsOnPost}</h6>
+                                  </div>
+                              </div>
+
+                              `
+
+                              )
+                                }
+
+                          }
+        
+                          
+                
+                  
+                  //-----------posts counting--------//
+        
+          $(".card-title").text(user.name)
+          $(".card-text1").text(`Email:=${user.email}`)
+          $(".card-text")
+          .text(`Address - ${user.address.suite},
+              ${user.address.street},
+                          ${user.address.city},
+                          
+                          `
+                      )
+          
+                  
+
+
+              })
+            })
+          </script>
+
+      </head>
+
+      <body>
+
+          <div class="container">
+              <h2>User Info</h2>
+            
+              <div class="card" style="width:400px">
+                <img class="card-img-top" src="https://www.w3schools.com/bootstrap4/img_avatar1.png" alt="Card image" style="width:100%">
+                <div class="card-body">
+                  <h4 class="card-title">John Doe</h4>
+                  <p class="card-text1"></p>
+                  <p class="card-text"></p>
+                  
+                  <a href="#" class="btn btn-primary">See Profile</a>
+                </div>
+              </div>
+              <br>
+              
+          
+            <!----><!---->
+              <div class= "row">
+                                  <div id class="col-lg-6" >
+                      <div class="card1">
+                            </div></div>
+                    
+          
+                    <!----><!---- forposts--->
+                    <div class="col-lg-6">
+                      <div id ="card3" class="card bg-light">
+                          <div class="card-body">
+                              <h5  id="postCount" class="card-title">Light card title</h5>
+                              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu sem tempor.</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              </div>
+              
+          </div>
+
+      </body>
+  </hmtl>
